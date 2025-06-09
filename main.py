@@ -3,7 +3,7 @@ import flet as ft
 from datetime import datetime
 
 # Настройки API GitHub
-GITHUB_TOKEN = "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"
+GITHUB_TOKEN = ""
 headers = {
     "Authorization": f"Bearer {GITHUB_TOKEN}",
     "Accept": "application/vnd.github+json",
