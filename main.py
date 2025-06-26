@@ -2,7 +2,7 @@ import requests
 import flet as ft
 from datetime import datetime
 
-# Настройки API GitHub
+
 GITHUB_TOKEN = ""
 headers = {
     "Authorization": f"Bearer {GITHUB_TOKEN}",
@@ -12,23 +12,22 @@ headers = {
 
 def get_user_data(username):
     try:
-        # Основные данные пользователя
         user_url = f"https://api.github.com/users/{username}"
         response = requests.get(user_url, headers=headers)
         response.raise_for_status()
         user_data = response.json()
 
-        # Приватная почта (если доступна)
+
         email_url = f"https://api.github.com/users/{username}/emails"
         email_response = requests.get(email_url, headers=headers)
         emails = email_response.json() if email_response.status_code == 200 else []
 
-        # Рассчитываем возраст аккаунта
+
         created_at = datetime.strptime(user_data['created_at'], '%Y-%m-%dT%H:%M:%SZ')
         account_age_days = (datetime.now() - created_at).days
         account_age_years = account_age_days // 365
 
-        # Формируем данные для отображения
+
         user_info = {
             "Логин": user_data.get("login"),
             "ID": user_data.get("id"),
@@ -42,7 +41,7 @@ def get_user_data(username):
             "URL форков": f"https://api.github.com/repos/{username}/instagram_bot/forks",
             "URL событий": user_data.get("received_events_url"),
             "URL языков": f"https://api.github.com/repos/{username}/discount_bot/languages",
-            "Разрешено форкирование": "Да"  # Значение по умолчанию
+            "Разрешено форкирование": "Да"
         }
         
         return user_info
@@ -57,10 +56,9 @@ def main(page: ft.Page):
     page.window_height = 1080
     page.vertical_alignment = ft.MainAxisAlignment.CENTER
     page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
-    #page.background = ft.Color("000000")
     page.scroll = ft.ScrollMode.AUTO
 
-    # Элементы интерфейса
+
     username_input = ft.TextField(
         label="Введите GitHub username",
         width=400,
@@ -104,7 +102,7 @@ def main(page: ft.Page):
             user_data = get_user_data(username)
             result_column.controls.clear()
             
-            # Добавляем заголовок
+
             result_column.controls.append(
                 ft.Text(f"Данные пользователя {username}:", 
                        size=18, 
@@ -112,7 +110,7 @@ def main(page: ft.Page):
                        color=ft.Colors.WHITE)
             )
             
-            # Добавляем данные
+
             for key, value in user_data.items():
                 result_column.controls.append(create_info_row(key, value))
             
@@ -131,7 +129,7 @@ def main(page: ft.Page):
             loading_indicator.visible = False
             page.update()
 
-    # Собираем интерфейс
+
     page.add(
         ft.Column(
             [
